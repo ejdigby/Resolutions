@@ -8,10 +8,20 @@ html
     meta(name='author', content= "author of the site")
     //- uncomment if your site is responsive!
     //- meta(name="viewport" content="width=device-width, initial-scale=1")
+
+
     title= _path
     != css()
 
   body
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    
+    header 
+        .add
+            img(src="/img/Add.svg")
+        h1 Resolutions
+
     block content
 
     != js()

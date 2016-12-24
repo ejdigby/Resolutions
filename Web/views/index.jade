@@ -2,11 +2,11 @@ extends layout
 
 block content
 	.container
-		.title
+		.title.fadeInDown.animated 
 			h1 Resolutions
 			h2 Post your new year resolutions!
-			.textfield
-				input(type="text")
-			.button
-
-				button Add!
+			form(action="submitForm()", method="post")
+				.textfield
+					input(type="text", name="resolution", class="input", placeholder="I Would Like To...")
+				.button
+					button Add!
