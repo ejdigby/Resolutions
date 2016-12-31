@@ -48,6 +48,7 @@ var addnew = function(resolution){
 			    		throw err;
 			   		} else { 
 			   		 	console.log("Item Added") 
+			   		 	io.emit('data', req.body.resolution)
 			    	}
 			    db.close()
 				});
@@ -60,9 +61,7 @@ var addnew = function(resolution){
 //Define POST route for /
 app.post('/', function(req, res){
 	console.log(1, "Request for /")
-	
 	if (swearjar.profane(req.body.resolution) == false) {
-		io.emit('data', req.body.resolution)
 		addnew(req.body.resolution)
 	} else {
 		console.log("Profanity Detected")
