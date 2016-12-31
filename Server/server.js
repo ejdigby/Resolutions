@@ -37,17 +37,23 @@ console.log("Server Started On Port " + port)
 
 var addnew = function(resolution){
 	MongoClient.connect(url, function (err, db){
-		if (err)throw err;
-		console.log("Connected correctly to server");
-		db.collection("data").insert({"resolution" : resolution}, function(err, doc) {
-			    if(err){
-			    	throw err;
-			    } else { 
-			    	console.log("Item Added") 
-			    }
+
+
+		db.collection('data').find({}).toArray(function(err, doc){
+			if (resolution != doc[doc.length - 1].resolution){
+		 		if (err)throw err;
+				console.log("Connected correctly to server");
+				db.collection("data").insert({"resolution" : resolution}, function(err, doc) {
+			    	if(err){
+			    		throw err;
+			   		} else { 
+			   		 	console.log("Item Added") 
+			    	}
 			    db.close()
+				});
+			}
+
 		});
-		
 	});
 }
 
