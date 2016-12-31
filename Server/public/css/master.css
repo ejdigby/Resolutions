@@ -2516,3 +2516,12 @@ body {
           font-size: 12px; }
           body .container .card-container .card .up img {
             width: 15px; }
+
+            .twitter{
+              width: 40px;
+margin-right: 2em;
+cursor: pointer;
+}
+.twitter img {
+  width:100%;
+}
