@@ -12,7 +12,13 @@ if (Cookies.get('added') == "true") {
 	$(".card-container").show();
 	$("header").show();
 }
-
+$( document ).ready(function() {
+    var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+    $(".title").addClass('animated ' + "fadeInDown").one(animationEnd, function() {
+                $(this).removeClass('animated ' + "fadeInDown");
+                 });
+    
+});
 
 $(document).keyup(function(e) {
     if (e.keyCode == 27) { // escape key maps to keycode `27`
@@ -56,12 +62,19 @@ $(".add").click(function(e) {
 
 
     		$("header").addClass('animated ' + "fadeOutUp").one(animationEnd, function() {
-    			$(this).removeClass('animated ' + "fadeOutUp");
-        		$(this).hide()
+    		    $("header").removeClass('animated ' + "fadeOutUp");
+        	    $(this).hide()
         		});
 			$(".card-container").hide();
+                        $("header").hide();
    			$(".title").show();
-			$(".title").addClass('animated ' + "fadeInDown")
+        		$(".title").addClass('animated ' + "fadeInDown").one(animationEnd, function() {
+			  	$(".card-container").hide();
+			     $("header").hide();
+    		    $("header").removeClass('animated ' + "fadeOutUp");
+			});
+
+
 	   	 
 	e.preventDefault();
 
