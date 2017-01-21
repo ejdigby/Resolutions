@@ -37,7 +37,6 @@ $(document).keyup(function(e) {
 //Receive Data
 socket.on('data', function (data) {
  	resolutions.push(data)
- 	console.log(resolutions)
  	if (count > 80){
  		;
 		var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
