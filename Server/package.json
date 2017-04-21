@@ -1,7 +1,7 @@
 {
   "name": "Resolutions",
   "version": "0.0.1",
-  "description": "",
+  "description": "Post your own and see other's new year's resolutions!",
   "dependencies": {
     "body-parser": "^1.15.2",
     "express": "*",

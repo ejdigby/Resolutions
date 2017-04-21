@@ -1,49 +1,50 @@
 //Import Libraries and setup server
-var express = require("express")
-var bodyParser = require('body-parser')
-var app = express()
-var server = require('http').createServer(app);
-var port = 8082
-var io = require('socket.io').listen(server);
-var MongoClient = require('mongodb').MongoClient;
-var format = require('util').format;
-app.use(bodyParser());
-var url = 'mongodb://localhost:27017/Resolutions';
-var swearjar = require('swearjar');
+var express = require("express"),
+bodyParser = require('body-parser'),
+app = express(),
+server = require('http').createServer(app),
+io = require('socket.io').listen(server),
+MongoClient = require('mongodb').MongoClient,
+format = require('util').format,
+url = 'mongodb://localhost:27017/Resolutions',
+swearjar = require('swearjar');
 
-//Listen on port 8080
+app.use(bodyParser());
+var port = 8082
+
+
 server.listen(port)
 console.log("Server Started On Port " + port)
 
-
-
- var readnew = function(socket) {
+//Emit All Resolutions
+var readnew = function(socket) {
+	//Connect to Mongo server
 	MongoClient.connect(url, function (err, db){
-	if (err)throw err;
-	console.log("Connected correctly to server");
+		if (err)throw err;
 
-	db.collection('data').find({}).toArray(function(err, doc){
-		for (x = 0; x < doc.length; x++){
-		  	socket.emit('data', doc[x].resolution)
-		  	console.log(doc[x].resolution)
-		} 
-		db.close()
-	  });	
-	
-});
-
+		//Find all resolutions from the data table
+		db.collection('data').find({}).toArray(function(err, doc){
+			//Emit each resolution
+			for (x = 0; x < doc.length; x++){
+			  	socket.emit('data', doc[x].resolution)
+			  	console.log(doc[x].resolution)
+			} 
+			db.close()
+		  });	
+	});
  }
 
 
+//Add New Resolution
 var addnew = function(resolution){
-    
+
 	MongoClient.connect(url, function (err, db){
-
-
+		//Check to see if the resolution is the last item (checking for re-submission) in the db
 		db.collection('data').find({}).toArray(function(err, doc){
 			if (resolution != doc[doc.length - 1].resolution && resolution.length < 80){
 		 		if (err)throw err;
-				console.log("Connected correctly to server");
+
+		 		//Insert resolution into the db
 				db.collection("data").insert({"resolution" : resolution}, function(err, doc) {
 			    	if(err){
 			    		throw err;
@@ -59,10 +60,13 @@ var addnew = function(resolution){
 	});
 }
 
-//Define POST route for /
+
+//Define POST route for '/''
 app.post('/', function(req, res){
 	console.log(1, "Request for /")
+	//Check the post for profanity
 	if (swearjar.profane(req.body.resolution) == false) {
+		//If none found, add new resolution
 		addnew(req.body.resolution)
 	} else {
 		console.log("Profanity Detected")
@@ -70,11 +74,11 @@ app.post('/', function(req, res){
 	
 });
 
+//On new client connect, emit resolutions
 io.sockets.on('connection', function (socket) {
     console.log("New Connection")
     readnew(socket)
 });
+
 //Define GET route for /
 app.use('/', express.static(__dirname + "/public/"))
-
-// readnew()
