@@ -26,8 +26,10 @@ var readnew = function(socket) {
 		db.collection('data').find({}).toArray(function(err, doc){
 			//Emit each resolution
 			for (x = 0; x < doc.length; x++){
-			  	socket.emit('data', doc[x].resolution)
-			  	console.log(doc[x].resolution)
+				if (doc[x].public == true){
+			  		socket.emit('data', doc[x].resolution)
+			  		console.log(doc[x].resolution)
+			  	}
 			} 
 			db.close()
 		  });	
